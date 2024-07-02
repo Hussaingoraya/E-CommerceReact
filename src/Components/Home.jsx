@@ -9,15 +9,27 @@ export default function Home() {
     navigate("/details/" + productId);
   };
   let [ecomData, setecomData] = useState([]);
+  let [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       let response = await storeData("products");
       console.log(response);
+      setLoading(false);
       setecomData(response);
     };
     getData();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="text-center">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
   return (
     <>
       <div className="container">
@@ -27,10 +39,9 @@ export default function Home() {
               <div className="card">
                 <img src={item.image} className="card-img-top" alt="..." />
                 <div className="card-body">
+                    <p>{item.category}</p>
                   <h5 className="card-title">{item.title}</h5>
                   <h4>Price : {item.price}$</h4>
-                  <h5>Ratings : {item.rating.rate}</h5>
-                  {/* <p className="card-text">{item.description}</p> */}
                 </div>
               </div>
               <button
